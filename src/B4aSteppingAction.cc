@@ -38,10 +38,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4aSteppingAction::B4aSteppingAction(
-    const B4DetectorConstruction *detectorConstruction)
+    const B4DetectorConstruction *detectorConstruction, B4aEventAction *eventAction)
     : G4UserSteppingAction(),
       fDetConstruction(detectorConstruction),
-
+      fEventAction(eventAction),
       fScoringVol(0)
 {
   auto runmanager = G4RunManager::GetRunManager();
@@ -89,27 +89,55 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
   G4double kinEnergy = track->GetKineticEnergy();
   G4String ParticleName = track->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
 
-  /*
   G4String ProcessName = "None";
+
   if (track->GetCreatorProcess())
   {
     G4int trackid = track->GetTrackID();
-    //ProcessName = track->GetCreatorProcess()->GetProcessName();
+    // ProcessName = track->GetCreatorProcess()->GetProcessName();
     ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
-    G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << G4endl;
+    // G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << G4endl;
   }
+  /*
   G4cout << "ProcessName: " << ProcessName << " VolumeNames: " << preVolName << preVolume << " -> " << postVolName << " "
-         << "ParticleName: " << ParticleName << " Position: " << position_World.x() << " -> " << postposition.x() << " " << position_World.y() << " -> " << postposition.y() << " " << position_World.z() << " -> " << postposition.z() << G4endl;
+         << "ParticleName: " << ParticleName << " Position: " << position_World.x() << " -> " << postposition.x() << " " << position_World.y() << " -> " << postposition.y() << " " << position_World.z() << " -> " << postposition.z() << " Energy: " << kinEnergy << G4endl;
 */
+
+  auto filepath_step = runaction_u->GetDirName() + "_StepInfo/" + runaction_u->GetFileName();
+  std::ofstream writing_file_step;
+  writing_file_step.open(filepath_step, std::ios::app);
+  writing_file_step << ProcessName << " " << preVolName << " " << preVolume << " " << postVolName
+                    << " " << ParticleName << " " << position_World.x() << " " << postposition.x() << " " << position_World.y() << " " << postposition.y() << " " << position_World.z() << " " << postposition.z() << " " << kinEnergy / MeV << std::endl;
+  // Collect energy and track length step by step
+  // get volume of the current step
+
+  /*
+    auto volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
+
+    // energy deposit
+    auto edep = step->GetTotalEnergyDeposit();
+
+    // step length
+    G4double stepLength = 0.;
+    if (step->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
+    {
+      stepLength = step->GetStepLength();
+    }
+
+    if (volume == fDetConstruction->GetAbsorberPV())
+    {
+      fEventAction->AddAbs(edep, stepLength);
+    }
+  */
 
   auto filepath = runaction_u->GetDirName() + "/" + runaction_u->GetFileName();
   std::ofstream writing_file;
   writing_file.open(filepath, std::ios::app);
-  //if step is within the scoring volume
+  // if step is within the scoring volume
   fScoringVol = fDetConstruction->GetScoringVol();
   if (preVolume == fScoringVol && ParticleName == "opticalphoton")
   {
-    //G4cout << "WRITING TO FILE... " << postposition.x() << " " << postposition.y() << " " << postposition.z() << " " << 1240 / kinEnergy * eV << G4endl;
+    // G4cout << "WRITING TO FILE... " << postposition.x() << " " << postposition.y() << " " << postposition.z() << " " << 1240 / kinEnergy * eV << G4endl;
 
     writing_file << postposition.x() << " " << postposition.y() << " " << postposition.z() << " " << 1240 / kinEnergy * eV << std::endl;
   }
@@ -117,30 +145,5 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
   {
   }
 }
-// Collect energy and track length step by step
-// get volume of the current step
-/*
-  auto volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume();
-
-  // energy deposit
-  auto edep = step->GetTotalEnergyDeposit();
-
-  // step length
-  G4double stepLength = 0.;
-  if (step->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
-  {
-    stepLength = step->GetStepLength();
-  }
-
-  if (volume == fDetConstruction->GetAbsorberPV())
-  {
-    fEventAction->AddAbs(edep, stepLength);
-  }
-
-  if (volume == fDetConstruction->GetGapPV())
-  {
-    fEventAction->AddGap(edep, stepLength);
-  }
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

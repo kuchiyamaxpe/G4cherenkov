@@ -1,0 +1,7 @@
+{
+  "files.associations": {
+    "*.sql": "sql",
+    "*.vue": "vue",
+    "locale": "cpp"
+  }
+}

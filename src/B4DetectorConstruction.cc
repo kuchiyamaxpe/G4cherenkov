@@ -61,8 +61,8 @@ G4ThreadLocal
 
 B4DetectorConstruction::B4DetectorConstruction()
     : G4VUserDetectorConstruction(),
-      fAbsorberPV(nullptr),
-      fGapPV(nullptr),
+      fSiLEDunitPV(nullptr),
+      fCherenvokglassPV(nullptr),
       fDetectorPV(nullptr),
       fCheckOverlaps(true),
       fScoringVol(0)
@@ -363,7 +363,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         defaultMaterial, // its material
         "SiLEDunitLV");  // its name
 
-    new G4PVPlacement(
+    fSiLEDunitPV = new G4PVPlacement(
         0,                                        // no rotation
         G4ThreeVector(0, 0, -calorThickness / 2), // at (0,0,0)
         SiLEDunitLV,                              // its logical volume
@@ -443,7 +443,8 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         cherenkovglassMaterial, // its material
         "cherenkovglassLV");    // its name
 
-    fAbsorberPV = new G4PVPlacement(
+    fCherenvokglassPV = new G4PVPlacement(
+
         0,                                                                                                 // no rotation
         G4ThreeVector(0., 0., -(gapThickness + detectorThickness) / 2 + lowerenergydetectorThickness / 2), // its position
         cherenkovglassLV,                                                                                  // its logical volume

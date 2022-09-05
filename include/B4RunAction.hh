@@ -63,7 +63,8 @@ public:
   virtual void EndOfRunAction(const G4Run *);
   std::string GetFileName() { return outputname; };
   std::string GetDirName() { return dirname; };
-  std::string GetTrackInfoDirName(){return dirname + "_TrackInfo";};
+  std::string GetTrackInfoDirName() { return dirname + "_TrackInfo"; };
+  std::string GetStepInfoDirName() { return dirname + "_StepInfo"; };
 
 private:
   void DefineCommands();

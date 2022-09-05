@@ -77,8 +77,8 @@ private:
   static G4ThreadLocal G4GlobalMagFieldMessenger *fMagFieldMessenger;
   // magnetic field messenger
 
-  G4VPhysicalVolume *fAbsorberPV; // the absorber physical volume
-  G4VPhysicalVolume *fGapPV;      // the gap physical volume
+  G4VPhysicalVolume *fSiLEDunitPV;      // the absorber physical volume
+  G4VPhysicalVolume *fCherenvokglassPV; // the gap physical volume
   G4VPhysicalVolume *fDetectorPV;
   G4bool fCheckOverlaps; // option to activate checking of volumes overlaps
 protected:
@@ -89,12 +89,12 @@ protected:
 
 inline const G4VPhysicalVolume *B4DetectorConstruction::GetAbsorberPV() const
 {
-  return fAbsorberPV;
+  return fSiLEDunitPV;
 }
 
 inline const G4VPhysicalVolume *B4DetectorConstruction::GetGapPV() const
 {
-  return fGapPV;
+  return fCherenvokglassPV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

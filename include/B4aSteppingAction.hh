@@ -44,7 +44,7 @@ class G4LogicalVolume;
 class B4aSteppingAction : public G4UserSteppingAction
 {
 public:
-  B4aSteppingAction(const B4DetectorConstruction *detectorConstruction);
+  B4aSteppingAction(const B4DetectorConstruction *detectorConstruction, B4aEventAction *eventAction);
   virtual ~B4aSteppingAction();
 
   virtual void UserSteppingAction(const G4Step *step);
@@ -53,6 +53,7 @@ public:
 private:
   const B4DetectorConstruction *fDetConstruction;
   G4LogicalVolume *fScoringVol;
+  B4aEventAction *fEventAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -73,23 +73,59 @@ void G4CherenkovTrackingAction::PreUserTrackingAction(const G4Track *track)
     ProcessName = track->GetCreatorProcess()->GetProcessName();
     MasterProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
 
-    //ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
-    //G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << " ProcessName: " << ProcessName << " ParticleName: "<<ParticleName << G4endl;
-
+    // ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
+    // G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << " ProcessName: " << ProcessName << " ParticleName: "<<ParticleName << G4endl;
   }
 
+  G4String Volname = track->GetTouchable()->GetVolume()->GetLogicalVolume()->GetName();
+  G4String postVolName = "END";
+  if (track->GetNextVolume())
+  {
+    postVolName = track->GetNextTouchable()->GetVolume()->GetLogicalVolume()->GetName();
+  }
 
+  ///............Writing Track Infomation...................
+  auto filepath = runaction_u->GetDirName() + "_TrackInfo/" + runaction_u->GetFileName();
+  std::ofstream writing_file;
+  writing_file.open(filepath, std::ios::app);
+  // if step is within the scoring volume
+  writing_file << Volname << " " << postVolName << " " << trackid << " " << MasterProcessName << " " << ProcessName << " " << ParticleName << " " << kinEnergy / MeV << std::endl;
 
+  /*
+      G4StepPoint *preStepPoint = step->GetPreStepPoint();
+      G4StepPoint *postStepPoint = step->GetPostStepPoint();
 
-    ///............Writing Track Infomation...................
-    auto filepath = runaction_u->GetDirName() + "_TrackInfo/" + runaction_u->GetFileName();
-    std::ofstream writing_file;
-    writing_file.open(filepath, std::ios::app);
-    //if step is within the scoring volume
-    writing_file << trackid<< " " << MasterProcessName <<" "<<ProcessName << " " << ParticleName<<" "<<kinEnergy/MeV <<std::endl;
+      G4TouchableHandle preTouchable = preStepPoint->GetTouchableHandle();
 
+      G4LogicalVolume *preVolume = preTouchable->GetVolume()->GetLogicalVolume();
 
+      G4String preVolName = preVolume->GetName();
 
+      G4ThreeVector position_World = preStepPoint->GetPosition();
+      G4ThreeVector postposition = postStepPoint->GetPosition();
 
+      G4Track *track = step->GetTrack();
 
+      G4String postVolName = "END";
+      if (track->GetNextVolume())
+      {
+        postVolName = track->GetNextTouchable()->GetVolume()->GetLogicalVolume()->GetName();
+      }
+
+      G4ThreeVector momentum = track->GetMomentum();
+      G4double kinEnergy = track->GetKineticEnergy();
+      G4String ParticleName = track->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
+  */
+  /*
+  G4String ProcessName = "None";
+  if (track->GetCreatorProcess())
+  {
+    G4int trackid = track->GetTrackID();
+    //ProcessName = track->GetCreatorProcess()->GetProcessName();
+    ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
+    G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << G4endl;
+  }
+  G4cout << "ProcessName: " << ProcessName << " VolumeNames: " << preVolName << preVolume << " -> " << postVolName << " "
+         << "ParticleName: " << ParticleName << " Position: " << position_World.x() << " -> " << postposition.x() << " " << position_World.y() << " -> " << postposition.y() << " " << position_World.z() << " -> " << postposition.z() << G4endl;
+*/
 }

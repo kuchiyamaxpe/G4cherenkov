@@ -66,8 +66,9 @@ void B4RunAction::BeginOfRunAction(const G4Run * /*run*/)
     std::cout << "Master Thread Start" << std::endl;
     struct stat st;
 
-    //auto dirname_trackinfo = dirname + "_TrackInfo";
+    // auto dirname_trackinfo = dirname + "_TrackInfo";
     auto dirname_trackinfo = GetTrackInfoDirName();
+    auto dirname_stepinfo = GetStepInfoDirName();
     int ret = stat(dirname.c_str(), &st);
 
     if (0 == ret)
@@ -88,6 +89,16 @@ void B4RunAction::BeginOfRunAction(const G4Run * /*run*/)
     {
       std::cout << "make Data Directory" << std::endl;
       mkdir(dirname_trackinfo.c_str(), 0777);
+    }
+
+    if (0 == stat(dirname_stepinfo.c_str(), &st))
+    {
+      std::cout << "Data Directory is already existed" << std::endl;
+    }
+    else
+    {
+      std::cout << "make Data Directory" << std::endl;
+      mkdir(dirname_stepinfo.c_str(), 0777);
     }
 
     auto Nevent = runmanager->GetCurrentRun()->GetNumberOfEventToBeProcessed();
@@ -111,6 +122,16 @@ void B4RunAction::BeginOfRunAction(const G4Run * /*run*/)
     writing_file << "SettingEnergy[MeV]: " << energy << std::endl;
     writing_file << "########## TrackData ##########" << std::endl;
     writing_file.close();
+
+    ///.................Writing Step Info...........................
+
+    writing_file.open(dirname_stepinfo + "/" + filename, std::ios::trunc);
+    writing_file << "########## GeneratedPhotonInfo ##########" << std::endl;
+    writing_file << "seed: " << G4Random::getTheSeed() << std::endl;
+    writing_file << "TotalProton: " << Nevent << std::endl;
+    writing_file << "SettingEnergy[MeV]: " << energy << std::endl;
+    writing_file << "########## TrackData ##########" << std::endl;
+    writing_file.close();
   }
   else
   {
@@ -120,8 +141,8 @@ void B4RunAction::BeginOfRunAction(const G4Run * /*run*/)
     B4PrimaryGeneratorAction *pgenec = dynamic_cast<B4PrimaryGeneratorAction *>(pgene);
     pgenec->SetEnergy(energy);
   }
-  //inform the runManager to save random number seed
-  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  // inform the runManager to save random number seed
+  // G4RunManager::GetRunManager()->SetRandomNumberStore(true);
 
   // Get analysis manager
   // auto analysisManager = G4AnalysisManager::Instance();

@@ -61,13 +61,15 @@ void B4aActionInitialization::Build() const
 {
   SetUserAction(new B4PrimaryGeneratorAction);
   SetUserAction(new B4RunAction);
-  //auto eventAction = new B4aEventAction;
-  //SetUserAction(eventAction);
-  SetUserAction(new B4aSteppingAction(fDetConstruction));
+
+  auto eventAction = new B4aEventAction;
+  SetUserAction(eventAction);
 
   SetUserAction(new G4CherenkovTrackingAction());
-  //SetUserAction(new B4aSteppingAction(fDetConstruction, eventAction));
-  ///SetUserAction(new B4aStackingAction()); //追加
+
+  // SetUserAction(new B4aSteppingAction(fDetConstruction));
+  SetUserAction(new B4aSteppingAction(fDetConstruction, eventAction));
+  /// SetUserAction(new B4aStackingAction()); //追加
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
