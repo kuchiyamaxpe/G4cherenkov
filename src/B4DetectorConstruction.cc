@@ -94,8 +94,8 @@ void B4DetectorConstruction::DefineMaterials()
     auto nistManager = G4NistManager::Instance();
     nistManager->FindOrBuildMaterial("G4_Pb");
     nistManager->FindOrBuildMaterial("G4_GLASS_LEAD"); //追加。
-    //auto G4Si = G4Material::GetMaterial("Galactic");
-    // Liquid argon material
+    // auto G4Si = G4Material::GetMaterial("Galactic");
+    //  Liquid argon material
     G4double a; // mass of a mole;
     G4double z; // z=mean number of protons;
     G4double density;
@@ -122,7 +122,7 @@ void B4DetectorConstruction::DefineMaterials()
     SodiumOxide->AddElement(O, numberOfatoms = 1);
 
     G4Material *G4BK7 = new G4Material("G4BK7", density = 2.51 * g / cm3, nelements = 3);
-    //G4Material *G4BK7 = new G4Material("G4BK7", density = 0.01 * g / cm3, nelements = 3);
+    // G4Material *G4BK7 = new G4Material("G4BK7", density = 0.01 * g / cm3, nelements = 3);
 
     G4BK7->AddMaterial(Sillica, 80 * perCent);
     G4BK7->AddMaterial(BoricOxide, 4 * perCent);
@@ -157,20 +157,27 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 {
     // Geometry parameters
     G4int nofLayers = 1;
+    G4int nofSiLayers = 10;
+    G4double SidetecotrThickness = 500. * um;
+    G4double SidetecotrSizeXY = 30. * mm;
     G4double absoThickness = 20. * mm;
     G4double gapThickness = 0 * um;
+    G4double SigapThickness = 500. * um;
     G4double calorSizeXY = 49. * mm;
     G4double detectorThickness = 0.0 * mm;
 
     auto layerThickness = absoThickness + gapThickness + detectorThickness;
+    auto SilayerThickness = SidetecotrThickness + SigapThickness;
+
     auto calorThickness = nofLayers * layerThickness;
+    auto lowerenergydetectorThickness = nofSiLayers * SilayerThickness;
     auto worldSizeXY = 1. * calorSizeXY;
-    auto worldSizeZ = 1. * calorThickness;
+    auto worldSizeZ = 1. * calorThickness + 1. * lowerenergydetectorThickness;
 
     // Get materials
     auto defaultMaterial = G4Material::GetMaterial("IdealAbso");
-    auto absorberMaterial = G4Material::GetMaterial("G4BK7");
-    //auto absorberMaterial = G4Material::GetMaterial("G4_GLASS_LEAD");
+    auto cherenkovglassMaterial = G4Material::GetMaterial("G4BK7");
+    // auto absorberMaterial = G4Material::GetMaterial("G4_GLASS_LEAD");
     auto gapMaterial = G4Material::GetMaterial("Galactic");
     auto detectorMaterial = G4Material::GetMaterial("IdealAbso2");
     auto opticalgrease = G4Material::GetMaterial("G4Grease");
@@ -183,6 +190,9 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     const G4int nEntries = 2;
     G4double PhotonEnergy[nEntries] =
         {1.0 * eV, 4.0 * eV};
+    G4double RefractiveIndex0[nEntries] =
+        {1.0, 1.0};
+
     G4double RefractiveIndex1[nEntries] =
         {1.46, 1.46};
 
@@ -277,16 +287,18 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 
 
     */
+    G4MaterialPropertiesTable *vacuumeMPT = new G4MaterialPropertiesTable();
+    vacuumeMPT->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex0, nEntries);
 
     G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
-    //myMPT1->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
-    //myMPT1->AddProperty("RINDEX", PhotonEnergy_SK2, n_SK2, nEntries_SK2);
+    // myMPT1->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
+    // myMPT1->AddProperty("RINDEX", PhotonEnergy_SK2, n_SK2, nEntries_SK2);
     myMPT1->AddProperty("RINDEX", PhotonEnergy_MgF2, n_MgF2, nEntries_MgF2);
 
     G4MaterialPropertiesTable *myMPT2 = new G4MaterialPropertiesTable();
     myMPT2->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex1, nEntries);
-    //myMPT2->AddProperty("RINDEX", PhotonEnergy_MgF2, n_MgF2, nEntries_MgF2);
-    //myMPT2->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
+    // myMPT2->AddProperty("RINDEX", PhotonEnergy_MgF2, n_MgF2, nEntries_MgF2);
+    // myMPT2->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
 
     /*
     myMPT1->AddProperty("ABSLENGTH", PhotonEnergy, Absorption1, nEntries);
@@ -302,14 +314,15 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     G4MaterialPropertiesTable *myMPT3 = new G4MaterialPropertiesTable();
     myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex2, nEntries);
 
-    defaultMaterial->SetMaterialPropertiesTable(myMPT1);
-    absorberMaterial->SetMaterialPropertiesTable(myMPT1);
-    //gapMaterial->SetMaterialPropertiesTable(myMPT2);
-    //detectorMaterial->SetMaterialPropertiesTable(myMPT3);
+    // defaultMaterial->SetMaterialPropertiesTable(myMPT1);
+    defaultMaterial->SetMaterialPropertiesTable(vacuumeMPT);
+    cherenkovglassMaterial->SetMaterialPropertiesTable(myMPT1);
+    // gapMaterial->SetMaterialPropertiesTable(vacuumeMPT);
+    //  detectorMaterial->SetMaterialPropertiesTable(myMPT3);
     opticalgrease->SetMaterialPropertiesTable(myMPT2);
     MPPCwindow->SetMaterialPropertiesTable(myMPT3);
 
-    if (!defaultMaterial || !absorberMaterial || !gapMaterial)
+    if (!defaultMaterial || !cherenkovglassMaterial || !gapMaterial)
     {
         G4ExceptionDescription msg;
         msg << "Cannot retrieve materials already defined.";
@@ -339,33 +352,33 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         fCheckOverlaps); // checking overlaps
 
     //
-    // Calorimeter
+    // LowerEnergyDetector
     //
-    /*
-    auto calorimeterS = new G4Box("Calorimeter",                                         // its name
-                                  calorSizeXY / 2, calorSizeXY / 2, calorThickness / 2); // its size
 
-    auto calorLV = new G4LogicalVolume(
-        calorimeterS,    // its solid
+    auto SiLEDunit = new G4Box("SiLEDunit",                                                                   // its name
+                               SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, lowerenergydetectorThickness / 2); // its size
+
+    auto SiLEDunitLV = new G4LogicalVolume(
+        SiLEDunit,       // its solid
         defaultMaterial, // its material
-        "Calorimeter");  // its name
+        "SiLEDunitLV");  // its name
 
     new G4PVPlacement(
-        0,               // no rotation
-        G4ThreeVector(), // at (0,0,0)
-        calorLV,         // its logical volume
-        "Calorimeter",   // its name
-        worldLV,         // its mother  volume
-        false,           // no boolean operation
-        0,               // copy number
-        fCheckOverlaps); // checking overlaps
-*/
+        0,                                        // no rotation
+        G4ThreeVector(0, 0, -calorThickness / 2), // at (0,0,0)
+        SiLEDunitLV,                              // its logical volume
+        "LowerEnergyDetector",                    // its name
+        worldLV,                                  // its mother  volume
+        false,                                    // no boolean operation
+        0,                                        // copy number
+        fCheckOverlaps);                          // checking overlaps
+
     //
-    // Layer
+    // SiLEDLayer
     //
-    /*
-    auto layerS = new G4Box("Layer",                                               // its name
-                            calorSizeXY / 2, calorSizeXY / 2, layerThickness / 2); // its size
+
+    auto layerS = new G4Box("Layer",                                                           // its name
+                            SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SilayerThickness / 2); // its size
 
     auto layerLV = new G4LogicalVolume(
         layerS,          // its solid
@@ -373,33 +386,72 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         "Layer");        // its name
 
     new G4PVReplica(
-        "Layer",         // its name
-        layerLV,         // its logical volume
-        calorLV,         // its mother
-        kZAxis,          // axis of replication
-        nofLayers,       // number of replica
-        layerThickness); // witdth of replica
-*/
-    //
-    // Absorber
-    //
-    auto absorberS = new G4Box("Abso",                                               // its name
-                               calorSizeXY / 2, calorSizeXY / 2, absoThickness / 2); // its size
+        "Layer",           // its name
+        layerLV,           // its logical volume
+        SiLEDunitLV,       // its mother
+        kZAxis,            // axis of replication
+        nofSiLayers,       // number of replica
+        SilayerThickness); // witdth of replica
 
-    auto absorberLV = new G4LogicalVolume(
-        absorberS,        // its solid
-        absorberMaterial, // its material
-        "Abso");          // its name
+    //
+    // Si detecotr
+    //
+    auto SidetecotrS = new G4Box("Sidetector", SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SidetecotrThickness / 2);
+
+    auto SidetectorLV = new G4LogicalVolume(
+        SidetecotrS,   // its solid
+        MPPCwindow,    // its material
+        "Sidetector"); // its name
+
+    new G4PVPlacement(
+        0,                                          // no rotation
+        G4ThreeVector(0., 0., -SigapThickness / 2), // its position
+        SidetectorLV,                               // its logical volume
+        "Sidetector",                               // its name
+        layerLV,                                    // its mother  volume
+        false,                                      // no boolean operation
+        0,                                          // copy number
+        fCheckOverlaps);                            // checking overlaps
+    //
+    // Si detecotr gap
+    //
+    auto SigapS = new G4Box("Sigap", SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SigapThickness / 2);
+
+    auto SigapLV = new G4LogicalVolume(
+        SigapS,          // its solid
+        defaultMaterial, // its material
+        "Sidetector");   // its name
+
+    new G4PVPlacement(
+        0,                                              // no rotation
+        G4ThreeVector(0., 0., SidetecotrThickness / 2), // its position
+        SigapLV,                                        // its logical volume
+        "Sidetector",                                   // its name
+        layerLV,                                        // its mother  volume
+        false,                                          // no boolean operation
+        0,                                              // copy number
+        fCheckOverlaps);                                // checking overlaps
+
+    //
+    // cherenkovglass
+    //
+    auto cherenkovglassS = new G4Box("cherenkovglassS",                                    // its name
+                                     calorSizeXY / 2, calorSizeXY / 2, absoThickness / 2); // its size
+
+    auto cherenkovglassLV = new G4LogicalVolume(
+        cherenkovglassS,        // its solid
+        cherenkovglassMaterial, // its material
+        "cherenkovglassLV");    // its name
 
     fAbsorberPV = new G4PVPlacement(
-        0,                                                              // no rotation
-        G4ThreeVector(0., 0., -(gapThickness + detectorThickness) / 2), // its position
-        absorberLV,                                                     // its logical volume
-        "Abso",                                                         // its name
-        worldLV,                                                        // its mother  volume
-        false,                                                          // no boolean operation
-        0,                                                              // copy number
-        fCheckOverlaps);                                                // checking overlaps
+        0,                                                                                                 // no rotation
+        G4ThreeVector(0., 0., -(gapThickness + detectorThickness) / 2 + lowerenergydetectorThickness / 2), // its position
+        cherenkovglassLV,                                                                                  // its logical volume
+        "Abso",                                                                                            // its name
+        worldLV,                                                                                           // its mother  volume
+        false,                                                                                             // no boolean operation
+        0,                                                                                                 // copy number
+        fCheckOverlaps);                                                                                   // checking overlaps
 
     //
     // Gap
@@ -445,10 +497,11 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         0,                                                           // copy number
         fCheckOverlaps);                                             // checking overlaps
 */
-    fScoringVol = absorberLV;
+    fScoringVol = cherenkovglassLV;
     //
     // print parameters
     //
+    /*
     G4cout
         << G4endl
         << "------------------------------------------------------------" << G4endl
@@ -457,15 +510,15 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         << " + "
         << gapThickness / mm << "mm of " << gapMaterial->GetName() << " ] " << G4endl
         << "------------------------------------------------------------" << G4endl;
-
+*/
     //
     // Visualization attributes
     //
-    worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
+    // worldLV->SetVisAttributes(G4VisAttributes::GetInvisible());
 
     auto simpleBoxVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
     simpleBoxVisAtt->SetVisibility(true);
-    //calorLV->SetVisAttributes(simpleBoxVisAtt);
+    // calorLV->SetVisAttributes(simpleBoxVisAtt);
 
     //
     // Always return the physical World
