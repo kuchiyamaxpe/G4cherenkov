@@ -312,7 +312,8 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     myMPT1->AddConstProperty("YIELDRATIO", 0.8);
 */
     G4MaterialPropertiesTable *myMPT3 = new G4MaterialPropertiesTable();
-    myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex2, nEntries);
+    // myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex2, nEntries);
+    myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex0, nEntries);
 
     // defaultMaterial->SetMaterialPropertiesTable(myMPT1);
     defaultMaterial->SetMaterialPropertiesTable(vacuumeMPT);
