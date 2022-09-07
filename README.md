@@ -1,9 +1,12 @@
 # G4cherenkov
 
 # How to build
-mkdir path/to/builddirectory \n
-cd path/to/builddirectory \n
-cmake path/to/G4Cherenkov \n
+mkdir path/to/builddirectory 
+
+cd path/to/builddirectory 
+
+cmake path/to/G4Cherenkov 
+
 make
 
 # How to run
@@ -15,10 +18,13 @@ make
 
 \#\#\#\#\#\#\#\#\#\# PhotonData \#\#\#\#\#\#\#\#\#\#
 
-xposition(mm) yposition(mm) zposition(mm) wavelength(nm) \n
-. \n
-. \n
-. \n
+xposition(mm) yposition(mm) zposition(mm) wavelength(nm) 
+
+. 
+
+. 
+
+. 
 
 ## Energy deposit data on Si Layers (path/to/builddirectory/TestData_StepInfo/***.txt)
 
@@ -31,7 +37,11 @@ ProcessName preVolumeName preVolumeptr postVolumeName ParticleName prexposition 
 \#\#\#\#\#\#\#\#\#\# Si layer energy deposit \#\#\#\#\#\#\#\#\#\#
 
 No *: energy deposit(MeV) steplength(mm) //Noは照射方向から昇順
+
 .
+
+.
+
 .
 
 
@@ -40,8 +50,11 @@ No *: energy deposit(MeV) steplength(mm) //Noは照射方向から昇順
 \#\#\#\#\#\#\#\#\#\# TrackData \#\#\#\#\#\#\#\#\#\#
 
 preVolumeName postVolumeName trackid MasterProcessName ProcessName ParticleName KineticEnergy(MeV)
+
 .
+
 .
+
 .
 
 
