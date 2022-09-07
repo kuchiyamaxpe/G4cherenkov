@@ -1,9 +1,9 @@
 # G4cherenkov
 
 # How to build
-mkdir path/to/builddirectory
-cd path/to/builddirectory
-cmake path/to/G4Cherenkov
+mkdir path/to/builddirectory \n
+cd path/to/builddirectory \n
+cmake path/to/G4Cherenkov \n
 make
 
 # How to run
@@ -15,10 +15,10 @@ make
 
 \#\#\#\#\#\#\#\#\#\# PhotonData \#\#\#\#\#\#\#\#\#\#
 
-xposition(mm) yposition(mm) zposition(mm) wavelength(nm)
-.
-.
-.
+xposition(mm) yposition(mm) zposition(mm) wavelength(nm) \n
+. \n
+. \n
+. \n
 
 ## Energy deposit data on Si Layers (path/to/builddirectory/TestData_StepInfo/***.txt)
 
