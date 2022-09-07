@@ -32,6 +32,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 #
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+file(GLOB macros ${PROJECT_SOURCE_DIR}/mac/*.mac)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
@@ -51,8 +52,7 @@ set(EXAMPLEB4A_SCRIPTS
   init_vis.mac
   plotHisto.C
   plotNtuple.C
-  run1.mac
-  run2.mac
+  runtest.mac
   vis.mac
   )
 

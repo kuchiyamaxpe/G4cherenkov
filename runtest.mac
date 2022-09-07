@@ -1,0 +1,22 @@
+/run/initialize
+/G4Cherenkov/runaction/dirname TestData
+/G4Cherenkov/runaction/energy 50.000 MeV
+/random/setSeeds  2234040 10
+/G4Cherenkov/runaction/outputname 0050MeV.txt
+/run/beamOn 1
+/G4Cherenkov/runaction/dirname TestData
+/G4Cherenkov/runaction/energy 250.000 MeV
+/random/setSeeds  2234040 10
+/G4Cherenkov/runaction/outputname 0250MeV.txt
+/run/beamOn 1
+/G4Cherenkov/runaction/dirname TestData
+/G4Cherenkov/runaction/energy 500.000 MeV
+/random/setSeeds  2244040 10
+/G4Cherenkov/runaction/outputname 0500MeV.txt
+/run/beamOn 1
+
+/G4Cherenkov/runaction/dirname TestData
+/G4Cherenkov/runaction/energy 1500.000 MeV
+/random/setSeeds  2254040 10
+/G4Cherenkov/runaction/outputname 1500MeV.txt
+/run/beamOn 1
