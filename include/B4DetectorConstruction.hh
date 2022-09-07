@@ -80,7 +80,10 @@ private:
   G4VPhysicalVolume *fSiLEDunitPV;      // the absorber physical volume
   G4VPhysicalVolume *fCherenvokglassPV; // the gap physical volume
   G4VPhysicalVolume *fDetectorPV;
+
   G4bool fCheckOverlaps; // option to activate checking of volumes overlaps
+  G4int nofSiLayers;
+
 protected:
   G4LogicalVolume *fScoringVol;
 };

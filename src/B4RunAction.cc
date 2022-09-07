@@ -130,8 +130,10 @@ void B4RunAction::BeginOfRunAction(const G4Run * /*run*/)
     writing_file << "seed: " << G4Random::getTheSeed() << std::endl;
     writing_file << "TotalProton: " << Nevent << std::endl;
     writing_file << "SettingEnergy[MeV]: " << energy << std::endl;
-    writing_file << "########## TrackData ##########" << std::endl;
+    writing_file << "########## Si Detector Data ##########" << std::endl;
     writing_file.close();
+
+    ///.................Writing Step Info...........................
   }
   else
   {

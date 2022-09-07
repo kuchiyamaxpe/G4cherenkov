@@ -28,7 +28,7 @@
 /// \brief Implementation of the B4DetectorConstruction class
 
 #include "B4DetectorConstruction.hh"
-
+#include "G4SidetectorSD.hh"
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 #include "G4Element.hh"
@@ -38,7 +38,7 @@
 #include "G4PVReplica.hh"
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"
-
+#include "G4SDManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -53,7 +53,7 @@
 //#include "B4TrackerSD.hh"
 #include "G4SDManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#include "G4AutoDelete.hh"
 G4ThreadLocal
     G4GlobalMagFieldMessenger *B4DetectorConstruction::fMagFieldMessenger = nullptr;
 
@@ -156,8 +156,9 @@ void B4DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 {
     // Geometry parameters
+    nofSiLayers = 15;
+
     G4int nofLayers = 1;
-    G4int nofSiLayers = 10;
     G4double SidetecotrThickness = 500. * um;
     G4double SidetecotrSizeXY = 30. * mm;
     G4double absoThickness = 20. * mm;
@@ -397,18 +398,18 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     //
     // Si detecotr
     //
-    auto SidetecotrS = new G4Box("Sidetector", SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SidetecotrThickness / 2);
+    auto SidetecotrS = new G4Box("SidetectorS", SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SidetecotrThickness / 2);
 
     auto SidetectorLV = new G4LogicalVolume(
-        SidetecotrS,   // its solid
-        MPPCwindow,    // its material
-        "Sidetector"); // its name
+        SidetecotrS,     // its solid
+        MPPCwindow,      // its material
+        "SidetectorLV"); // its name
 
     new G4PVPlacement(
         0,                                          // no rotation
         G4ThreeVector(0., 0., -SigapThickness / 2), // its position
         SidetectorLV,                               // its logical volume
-        "Sidetector",                               // its name
+        "SidetectorPV",                             // its name
         layerLV,                                    // its mother  volume
         false,                                      // no boolean operation
         0,                                          // copy number
@@ -531,22 +532,13 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4DetectorConstruction::ConstructSDandField()
-{ /*
-    // Create global magnetic field messenger.
-    // Uniform magnetic field is then created automatically if
-    // the field value is not zero.
-    G4String SDname = "MPPCSD";
-    B4TrackerSD *aTrackerSD = new B4TrackerSD(SDname, "TrackerHitsCollection");
-    G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
-    SetSensitiveDetector("DetectorLV", aTrackerSD, true);
+{
+    G4cout << "nofSiLayers: " << nofSiLayers << G4endl;
+    auto SiSD = new G4SidetectorSD("SidetectorSD", "SidetectorHitsCollection", nofSiLayers);
+    G4SDManager::GetSDMpointer()->AddNewDetector(SiSD);
+    SetSensitiveDetector("SidetectorLV", SiSD);
 
-    G4ThreeVector fieldValue;
-    fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
-    fMagFieldMessenger->SetVerboseLevel(1);
-
-    // Register the field messenger for deleting
     G4AutoDelete::Register(fMagFieldMessenger);
-    */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

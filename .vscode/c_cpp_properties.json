@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "Users/uchiyama/geant4/geant4_10_07/install_6/include/Geant4/**"
+            ],
+            "defines": [],
+            "macFrameworkPath": [],
+            "compilerPath": "/usr/local/bin/gcc",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "macos-gcc-x64",
+            "compilerArgs": [
+                "-DGeant4_DIR=/Users/uchiyama/geant4/geant4_10_07/install_6/lib/Geant4-10.7.1/"
+            ]
+        }
+    ],
+    "version": 4
+}
