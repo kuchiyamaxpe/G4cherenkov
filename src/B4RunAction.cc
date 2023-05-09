@@ -35,6 +35,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "B4PrimaryGeneratorAction.hh"
+#include <sys/stat.h> 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4RunAction::B4RunAction()

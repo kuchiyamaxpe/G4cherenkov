@@ -104,7 +104,7 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
 
   if (preVolName == "Sidetector" && postVolName == "cherenkovglassLV" && ParticleName == "proton")
   {
-    auto filepath_step = runaction_u->GetDirName() + "_StepInfo/" + runaction_u->GetFileName();
+    auto filepath_step = runaction_u->GetDirName() + "_SiDetector/" + runaction_u->GetFileName();
     std::ofstream writing_file_step;
     writing_file_step.open(filepath_step, std::ios::app);
     writing_file_step << ProcessName << " " << preVolName << " " << preVolume << " " << postVolName

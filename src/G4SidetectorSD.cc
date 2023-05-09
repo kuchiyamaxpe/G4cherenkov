@@ -74,7 +74,7 @@ void G4SidetectorSD::EndOfEvent(G4HCofThisEvent *)
   for (std::size_t i = 0; i < fNofCells; ++i)
     (*fHitsCollection)[i]->Print();
 
-  auto filepath_step = runaction_u->GetDirName() + "_StepInfo/" + runaction_u->GetFileName();
+  auto filepath_step = runaction_u->GetDirName() + "_SiDetector/" + runaction_u->GetFileName();
   std::ofstream writing_file_step;
   writing_file_step.open(filepath_step, std::ios::app);
   writing_file_step << "########## Si layer energy deposit ##########" << std::endl;

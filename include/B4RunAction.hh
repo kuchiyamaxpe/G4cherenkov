@@ -64,7 +64,7 @@ public:
   std::string GetFileName() { return outputname; };
   std::string GetDirName() { return dirname; };
   std::string GetTrackInfoDirName() { return dirname + "_TrackInfo"; };
-  std::string GetStepInfoDirName() { return dirname + "_StepInfo"; };
+  std::string GetStepInfoDirName() { return dirname + "_SiDetector"; };
 
 private:
   void DefineCommands();
