@@ -1,5 +1,8 @@
 # G4cherenkov
 
+# 動作確認済の環境
+geant4 11.0.4
+
 # How to build
 mkdir path/to/builddirectory 
 
