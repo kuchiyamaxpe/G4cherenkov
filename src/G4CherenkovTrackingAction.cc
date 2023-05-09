@@ -85,7 +85,7 @@ void G4CherenkovTrackingAction::PreUserTrackingAction(const G4Track *track)
   }
 
   ///............Writing Track Infomation...................
-  auto filepath = runaction_u->GetDirName() + "_TrackInfo/" + runaction_u->GetFileName();
+  auto filepath = runaction_u->GetTrackInfoDirName() + "/" + runaction_u->GetFileName();
   std::ofstream writing_file;
   writing_file.open(filepath, std::ios::app);
   // if step is within the scoring volume
