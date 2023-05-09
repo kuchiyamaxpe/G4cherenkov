@@ -161,10 +161,10 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     G4int nofLayers = 1;
     G4double SidetecotrThickness = 500. * um;
     G4double SidetecotrSizeXY = 30. * mm;
-    G4double absoThickness = 20. * mm;
+    G4double absoThickness = 15. * mm;
     G4double gapThickness = 0 * um;
     G4double SigapThickness = 500. * um;
-    G4double calorSizeXY = 49. * mm;
+    G4double calorSizeXY = 50. * mm;
     G4double detectorThickness = 0.0 * mm;
 
     auto layerThickness = absoThickness + gapThickness + detectorThickness;
@@ -292,9 +292,9 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     vacuumeMPT->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex0, nEntries);
 
     G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
-    // myMPT1->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
+     myMPT1->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
     // myMPT1->AddProperty("RINDEX", PhotonEnergy_SK2, n_SK2, nEntries_SK2);
-    myMPT1->AddProperty("RINDEX", PhotonEnergy_MgF2, n_MgF2, nEntries_MgF2);
+    // myMPT1->AddProperty("RINDEX", PhotonEnergy_MgF2, n_MgF2, nEntries_MgF2);
 
     G4MaterialPropertiesTable *myMPT2 = new G4MaterialPropertiesTable();
     myMPT2->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex1, nEntries);
