@@ -353,87 +353,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         0,               // copy number
         fCheckOverlaps); // checking overlaps
 
-    //
-    // LowerEnergyDetector
-    //
-
-    auto SiLEDunit = new G4Box("SiLEDunit",                                                                   // its name
-                               SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, lowerenergydetectorThickness / 2); // its size
-
-    auto SiLEDunitLV = new G4LogicalVolume(
-        SiLEDunit,       // its solid
-        defaultMaterial, // its material
-        "SiLEDunitLV");  // its name
-
-    fSiLEDunitPV = new G4PVPlacement(
-        0,                                        // no rotation
-        G4ThreeVector(0, 0, -calorThickness / 2), // at (0,0,0)
-        SiLEDunitLV,                              // its logical volume
-        "LowerEnergyDetector",                    // its name
-        worldLV,                                  // its mother  volume
-        false,                                    // no boolean operation
-        0,                                        // copy number
-        fCheckOverlaps);                          // checking overlaps
-
-    //
-    // SiLEDLayer
-    //
-
-    auto layerS = new G4Box("Layer",                                                           // its name
-                            SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SilayerThickness / 2); // its size
-
-    auto layerLV = new G4LogicalVolume(
-        layerS,          // its solid
-        defaultMaterial, // its material
-        "Layer");        // its name
-
-    new G4PVReplica(
-        "Layer",           // its name
-        layerLV,           // its logical volume
-        SiLEDunitLV,       // its mother
-        kZAxis,            // axis of replication
-        nofSiLayers,       // number of replica
-        SilayerThickness); // witdth of replica
-
-    //
-    // Si detecotr
-    //
-    auto SidetecotrS = new G4Box("SidetectorS", SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SidetecotrThickness / 2);
-
-    auto SidetectorLV = new G4LogicalVolume(
-        SidetecotrS,     // its solid
-        MPPCwindow,      // its material
-        "SidetectorLV"); // its name
-
-    new G4PVPlacement(
-        0,                                          // no rotation
-        G4ThreeVector(0., 0., -SigapThickness / 2), // its position
-        SidetectorLV,                               // its logical volume
-        "SidetectorPV",                             // its name
-        layerLV,                                    // its mother  volume
-        false,                                      // no boolean operation
-        0,                                          // copy number
-        fCheckOverlaps);                            // checking overlaps
-    //
-    // Si detecotr gap
-    //
-    auto SigapS = new G4Box("Sigap", SidetecotrSizeXY / 2, SidetecotrSizeXY / 2, SigapThickness / 2);
-
-    auto SigapLV = new G4LogicalVolume(
-        SigapS,          // its solid
-        defaultMaterial, // its material
-        "Sidetector");   // its name
-
-    new G4PVPlacement(
-        0,                                              // no rotation
-        G4ThreeVector(0., 0., SidetecotrThickness / 2), // its position
-        SigapLV,                                        // its logical volume
-        "Sidetector",                                   // its name
-        layerLV,                                        // its mother  volume
-        false,                                          // no boolean operation
-        0,                                              // copy number
-        fCheckOverlaps);                                // checking overlaps
-
+  
     //
     // cherenkovglass
     //
@@ -533,12 +453,6 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 
 void B4DetectorConstruction::ConstructSDandField()
 {
-    G4cout << "nofSiLayers: " << nofSiLayers << G4endl;
-    auto SiSD = new G4SidetectorSD("SidetectorSD", "SidetectorHitsCollection", nofSiLayers);
-    G4SDManager::GetSDMpointer()->AddNewDetector(SiSD);
-    SetSensitiveDetector("SidetectorLV", SiSD);
-
-    G4AutoDelete::Register(fMagFieldMessenger);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

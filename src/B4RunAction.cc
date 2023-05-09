@@ -92,15 +92,6 @@ void B4RunAction::BeginOfRunAction(const G4Run * /*run*/)
       mkdir(dirname_trackinfo.c_str(), 0777);
     }
 
-    if (0 == stat(dirname_stepinfo.c_str(), &st))
-    {
-      std::cout << "Data Directory is already existed" << std::endl;
-    }
-    else
-    {
-      std::cout << "make Data Directory" << std::endl;
-      mkdir(dirname_stepinfo.c_str(), 0777);
-    }
 
     auto Nevent = runmanager->GetCurrentRun()->GetNumberOfEventToBeProcessed();
 
