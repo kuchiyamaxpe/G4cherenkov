@@ -121,7 +121,7 @@ void B4DetectorConstruction::DefineMaterials()
     SodiumOxide->AddElement(Na, numberOfatoms = 2);
     SodiumOxide->AddElement(O, numberOfatoms = 1);
 
-    G4Material *G4BK7 = new G4Material("G4BK7", density = 2.51 * g / cm3, nelements = 3);
+    G4Material *G4BK7 = new G4Material("G4BK7", density = 3.53 * g / cm3, nelements = 3);
     // G4Material *G4BK7 = new G4Material("G4BK7", density = 0.01 * g / cm3, nelements = 3);
 
     G4BK7->AddMaterial(Sillica, 80 * perCent);
@@ -292,8 +292,8 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     vacuumeMPT->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex0, nEntries);
 
     G4MaterialPropertiesTable *myMPT1 = new G4MaterialPropertiesTable();
-     myMPT1->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
-    // myMPT1->AddProperty("RINDEX", PhotonEnergy_SK2, n_SK2, nEntries_SK2);
+     //myMPT1->AddProperty("RINDEX", PhotonEnergy_BK7, n_BK7, nEntries_BK7);
+     myMPT1->AddProperty("RINDEX", PhotonEnergy_SK2, n_SK2, nEntries_SK2);
     // myMPT1->AddProperty("RINDEX", PhotonEnergy_MgF2, n_MgF2, nEntries_MgF2);
 
     G4MaterialPropertiesTable *myMPT2 = new G4MaterialPropertiesTable();
