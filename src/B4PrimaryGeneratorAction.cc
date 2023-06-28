@@ -28,7 +28,7 @@
 /// \brief Implementation of the B4PrimaryGeneratorAction class
 
 #include "B4PrimaryGeneratorAction.hh"
-
+#include "G4IonTable.hh"
 #include "G4RunManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
@@ -101,11 +101,22 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent)
                 "MyCode0002", JustWarning, msg);
   }
 
+G4int Z=6,A=12;
+G4double ionCharge=12.*eplus;
+
+  auto ion = G4IonTable::GetIonTable()->GetIon(Z,A);
+fParticleGun->SetParticleDefinition(ion);
+fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+
+
+
   fParticleGun->SetParticleEnergy(energy);
 
   // Set gun position
+  auto posx=(G4UniformRand() * 50 - 25) * mm;
+  auto posy=(G4UniformRand() * 50 - 25) * mm;
   fParticleGun
-      ->SetParticlePosition(G4ThreeVector(0., 0., -worldZHalfLength));
+      ->SetParticlePosition(G4ThreeVector(posx, posy, -worldZHalfLength));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
