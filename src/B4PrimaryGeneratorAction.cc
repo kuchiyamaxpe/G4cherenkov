@@ -113,8 +113,9 @@ fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
   fParticleGun->SetParticleEnergy(energy);
 
   // Set gun position
-  auto posx=(G4UniformRand() * 50 - 25) * mm;
-  auto posy=(G4UniformRand() * 50 - 25) * mm;
+  G4double beamsize = 5 * mm;
+  auto posx=(G4UniformRand()-0.5) * beamsize ;
+  auto posy=(G4UniformRand()-0.5) * beamsize ;
   fParticleGun
       ->SetParticlePosition(G4ThreeVector(posx, posy, -worldZHalfLength));
 
