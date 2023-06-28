@@ -41,9 +41,12 @@
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-
+#include "G4CherenkovPhysicsList.hh"
 #include "G4OpticalPhysics.hh"
 #include "G4TrajectoryDrawByParticleID.hh"
+
+#include "G4HadronPhysicsQGSP_BIC.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace
@@ -121,11 +124,17 @@ int main(int argc, char **argv)
   auto detConstruction = new B4DetectorConstruction();
   runManager->SetUserInitialization(detConstruction);
 
+  auto physlist = new G4CherenkovPhysicsList();
+  runManager->SetUserInitialization(physlist);
+
   //auto physicsList = new FTFP_BERT;
 
-  auto physicsList = new QGSP_BERT;                     // 変更。
-  physicsList->RegisterPhysics(new G4OpticalPhysics()); //追加。 光学光子の物理プロセス
-  runManager->SetUserInitialization(physicsList);
+  //auto physicsList = new QGSP_BERT;                     // 変更。
+  //physicsList->RegisterPhysics(new G4OpticalPhysics()); //追加。 光学光子の物理プロセス
+  //physicsList->RegisterPhysics(new )
+  //runManager->SetUserInitialization(physicsList);
+  
+  
   auto actionInitialization = new B4aActionInitialization(detConstruction);
   runManager->SetUserInitialization(actionInitialization);
 

@@ -106,6 +106,7 @@ G4double ionCharge=12.*eplus;
 
   auto ion = G4IonTable::GetIonTable()->GetIon(Z,A);
 fParticleGun->SetParticleDefinition(ion);
+fParticleGun->SetParticleCharge(ionCharge);
 fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
 
 
