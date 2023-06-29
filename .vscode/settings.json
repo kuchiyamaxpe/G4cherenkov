@@ -37,7 +37,8 @@
     "chrono": "cpp",
     "new": "cpp",
     "stdexcept": "cpp",
-    "stop_token": "cpp"
+    "stop_token": "cpp",
+    "*.icc": "cpp"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

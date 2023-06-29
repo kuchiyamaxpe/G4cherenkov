@@ -82,6 +82,7 @@ private:
   G4VPhysicalVolume *fDetectorPV;
   G4VPhysicalVolume *fDouserPV;
   G4VPhysicalVolume *fGapPV;
+  G4VPhysicalVolume *fDegraderPV;
   G4bool fCheckOverlaps; // option to activate checking of volumes overlaps
   G4int nofSiLayers;
 

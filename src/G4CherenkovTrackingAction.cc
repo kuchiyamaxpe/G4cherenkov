@@ -73,9 +73,9 @@ void G4CherenkovTrackingAction::PreUserTrackingAction(const G4Track *track)
     ProcessName = track->GetCreatorProcess()->GetProcessName();
     MasterProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
 
-    // ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
-    // G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << " ProcessName: " << ProcessName << " ParticleName: "<<ParticleName << G4endl;
-  }
+    ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
+     G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << " ProcessName: " << ProcessName << " ParticleName: "<<ParticleName <<" Energy:"<<kinEnergy/MeV<< G4endl;
+     }
 
   G4String Volname = track->GetTouchable()->GetVolume()->GetLogicalVolume()->GetName();
   G4String postVolName = "END";

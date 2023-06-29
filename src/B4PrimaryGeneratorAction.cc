@@ -118,7 +118,7 @@ fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,-1));
   auto posx=(G4UniformRand()-0.5) * beamsize ;
   auto posy=(G4UniformRand()-0.5) * beamsize ;
   fParticleGun
-      ->SetParticlePosition(G4ThreeVector(posx, posy, worldZHalfLength*2));
+      ->SetParticlePosition(G4ThreeVector(posx, posy, worldZHalfLength));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

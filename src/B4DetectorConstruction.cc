@@ -166,8 +166,9 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     G4double gapThickness = 1*mm;
     G4double SigapThickness = 500. * um;
     G4double calorSizeXY = 50. * mm;
-    G4double detectorThickness = 0.0 * mm;
-    G4double emptylayerThickness=4*m;
+    G4double detectorThickness = 1 * um;
+    G4double emptylayerThickness=1.5*m;
+    G4double degraderThickness=7*cm;
 
 
     auto layerThickness = absoThickness + gapThickness + detectorThickness;
@@ -201,7 +202,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         {1.43, 1.43};
 
     G4double RefractiveIndex2[nEntries] =
-        {1.41, 1.41};
+        {1.46, 1.46};
 
     const G4int nEntries_BK7 = 16;
     const G4int nEntries_SK2 = 15;
@@ -316,8 +317,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     myMPT1->AddConstProperty("YIELDRATIO", 0.8);
 */
     G4MaterialPropertiesTable *myMPT3 = new G4MaterialPropertiesTable();
-    // myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex2, nEntries);
-    myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex0, nEntries);
+    myMPT3->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex2, nEntries);
 
     // defaultMaterial->SetMaterialPropertiesTable(myMPT1);
     defaultMaterial->SetMaterialPropertiesTable(vacuumeMPT);
@@ -371,7 +371,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     fCherenvokglassPV = new G4PVPlacement(
 
         0,                                                                                                 // no rotation
-        G4ThreeVector(0., 0., absoThickness/2), // its position
+        G4ThreeVector(0., 0., gapThickness+absoThickness/2-worldSizeZ/2), // its position
         cherenkovglassLV,                                                                                  // its logical volume
         "Abso",                                                                                            // its name
         worldLV,                                                                                           // its mother  volume
@@ -395,7 +395,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     fDouserPV = new G4PVPlacement(
 
         0,                                                                                                 // no rotation
-        G4ThreeVector(0., 0., absoThickness+douserThickness/2), // its position
+        G4ThreeVector(0., 0., gapThickness+absoThickness+douserThickness/2-worldSizeZ/2), // its position
         douserLV,                                                                                  // its logical volume
         "Douser",                                                                                            // its name
         worldLV,                                                                                           // its mother  volume
@@ -403,7 +403,27 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         0,                                                                                                 // copy number
         fCheckOverlaps);                                                                                   // checking overlaps
 
+//
+// degrader
 
+    auto degraderS = new G4Box("degraderS",                                    // its name
+                                     calorSizeXY / 2, calorSizeXY / 2, degraderThickness / 2); // its size
+
+    auto degraderLV = new G4LogicalVolume(
+        degraderS,        // its solid
+        douserMaterial, // its material
+        "degraderLV");    // its name
+
+    
+    fDegraderPV=new G4PVPlacement(
+        0,                                                                                                 // no rotation
+        G4ThreeVector(0., 0., worldSizeZ/2-degraderThickness), // its position
+        degraderLV,                                                                                  // its logical volume
+        "degrader",                                                                                            // its name
+        worldLV,                                                                                           // its mother  volume
+        false,                                                                                             // no boolean operation
+        0,                                                                                                 // copy number
+        fCheckOverlaps);                                                                                   // checking overlaps
 
     //
     // Gap
@@ -415,22 +435,22 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     auto gapLV = new G4LogicalVolume(
         gapS,          // its solid
         opticalgrease, // its material
-        "Gap");        // its name
+        "GapLV");        // its name
 
     fGapPV = new G4PVPlacement(
         0,                                                                 // no rotation
-        G4ThreeVector(0., 0., -gapThickness / 2), // its position
+        G4ThreeVector(0., 0., gapThickness / 2 - worldSizeZ/2), // its position
         gapLV,                                                             // its logical volume
         "Gap",                                                             // its name
         worldLV,                                                           // its mother  volume
         false,                                                             // no boolean operation
         0,                                                                 // copy number
         fCheckOverlaps);                                                   // checking overlaps
-/*
+
     //
     // Detector
     //
-
+/*
     auto DetectorS = new G4Box("DetectorS",                                              // its name
                                calorSizeXY / 2, calorSizeXY / 2, detectorThickness / 2); // its size
 
@@ -441,7 +461,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 
     fDetectorPV = new G4PVPlacement(
         0,                                                           // no rotation
-        G4ThreeVector(0., 0., absoThickness / 2 + gapThickness / 2), // its position
+        G4ThreeVector(0., 0., -detectorThickness / 2), // its position
         DetectorLV,                                                  // its logical volume
         "DetectorPV",                                                // its name
         worldLV,                                                     // its mother  volume
@@ -449,7 +469,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         0,                                                           // copy number
         fCheckOverlaps);                                             // checking overlaps
 */
-    fScoringVol = cherenkovglassLV;
+    fScoringVol = gapLV;
     //
     // print parameters
     //

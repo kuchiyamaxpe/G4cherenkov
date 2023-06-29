@@ -107,7 +107,7 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
   writing_file.open(filepath, std::ios::app);
   // if step is within the scoring volume
   fScoringVol = fDetConstruction->GetScoringVol();
-  if (preVolume == fScoringVol&&postVolName=="Gap" && ParticleName == "opticalphoton")
+  if (preVolume == fScoringVol&&postVolName=="END" && ParticleName == "opticalphoton")
   {
     // G4cout << "WRITING TO FILE... " << postposition.x() << " " << postposition.y() << " " << postposition.z() << " " << 1240 / kinEnergy * eV << G4endl;
 
