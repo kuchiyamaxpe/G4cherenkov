@@ -107,7 +107,7 @@ G4double ionCharge=12.*eplus;
   auto ion = G4IonTable::GetIonTable()->GetIon(Z,A);
 fParticleGun->SetParticleDefinition(ion);
 fParticleGun->SetParticleCharge(ionCharge);
-fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
+fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,-1));
 
 
 
@@ -118,7 +118,7 @@ fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0,0,1));
   auto posx=(G4UniformRand()-0.5) * beamsize ;
   auto posy=(G4UniformRand()-0.5) * beamsize ;
   fParticleGun
-      ->SetParticlePosition(G4ThreeVector(posx, posy, -worldZHalfLength));
+      ->SetParticlePosition(G4ThreeVector(posx, posy, worldZHalfLength*2));
 
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }

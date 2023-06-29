@@ -140,8 +140,8 @@ void B4DetectorConstruction::DefineMaterials()
     new G4Material("Galactic", z = 1., a = 1.01 * g / mole, density = universe_mean_density,
                    kStateGas, 2.73 * kelvin, 3.e-18 * pascal);
 
-    new G4Material("G4Grease", z = 14., a = 28.08550 * g / mole, density = 2.2 * g / cm3);
-
+    new G4Material("G4Grease", z = 14., a = 28.08550 * g / mole, density = 1.03 * g / cm3);
+    G4Material *G4Al = new G4Material("G4Al",z=13,a=26.9815*g/mole,density=2.70*g/cm3 );
     G4Material *air =
         new G4Material("Air", density = 1.29 * mg / cm3, nelements = 2);
     air->AddElement(N, 70. * perCent);
@@ -156,16 +156,19 @@ void B4DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 {
     // Geometry parameters
-    nofSiLayers = 15;
+    G4int nofSiLayers = 0;
 
     G4int nofLayers = 1;
     G4double SidetecotrThickness = 500. * um;
     G4double SidetecotrSizeXY = 30. * mm;
     G4double absoThickness = 15. * mm;
-    G4double gapThickness = 0 * um;
+    G4double douserThickness=2*mm;
+    G4double gapThickness = 1*mm;
     G4double SigapThickness = 500. * um;
     G4double calorSizeXY = 50. * mm;
     G4double detectorThickness = 0.0 * mm;
+    G4double emptylayerThickness=4*m;
+
 
     auto layerThickness = absoThickness + gapThickness + detectorThickness;
     auto SilayerThickness = SidetecotrThickness + SigapThickness;
@@ -173,7 +176,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     auto calorThickness = nofLayers * layerThickness;
     auto lowerenergydetectorThickness = nofSiLayers * SilayerThickness;
     auto worldSizeXY = 1. * calorSizeXY;
-    auto worldSizeZ = 1. * calorThickness + 1. * lowerenergydetectorThickness;
+    auto worldSizeZ = 1. * calorThickness + 1. * lowerenergydetectorThickness+emptylayerThickness;
 
     // Get materials
     auto defaultMaterial = G4Material::GetMaterial("IdealAbso");
@@ -183,7 +186,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     auto detectorMaterial = G4Material::GetMaterial("IdealAbso2");
     auto opticalgrease = G4Material::GetMaterial("G4Grease");
     auto MPPCwindow = G4Material::GetMaterial("G4silicone");
-
+    auto douserMaterial =G4Material::GetMaterial("G4Al");
     //
     // ------------ Generate & Add Material Properties Table ------------
     //
@@ -195,7 +198,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         {1.0, 1.0};
 
     G4double RefractiveIndex1[nEntries] =
-        {1.46, 1.46};
+        {1.43, 1.43};
 
     G4double RefractiveIndex2[nEntries] =
         {1.41, 1.41};
@@ -368,7 +371,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     fCherenvokglassPV = new G4PVPlacement(
 
         0,                                                                                                 // no rotation
-        G4ThreeVector(0., 0., -(gapThickness + detectorThickness) / 2 + lowerenergydetectorThickness / 2), // its position
+        G4ThreeVector(0., 0., absoThickness/2), // its position
         cherenkovglassLV,                                                                                  // its logical volume
         "Abso",                                                                                            // its name
         worldLV,                                                                                           // its mother  volume
@@ -376,10 +379,36 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         0,                                                                                                 // copy number
         fCheckOverlaps);                                                                                   // checking overlaps
 
+
+//
+// douser
+//
+
+    auto douserS = new G4Box("douserS",                                    // its name
+                                     calorSizeXY / 2, calorSizeXY / 2, douserThickness / 2); // its size
+
+    auto douserLV = new G4LogicalVolume(
+        douserS,        // its solid
+        douserMaterial, // its material
+        "douserLV");    // its name
+
+    fDouserPV = new G4PVPlacement(
+
+        0,                                                                                                 // no rotation
+        G4ThreeVector(0., 0., absoThickness+douserThickness/2), // its position
+        douserLV,                                                                                  // its logical volume
+        "Douser",                                                                                            // its name
+        worldLV,                                                                                           // its mother  volume
+        false,                                                                                             // no boolean operation
+        0,                                                                                                 // copy number
+        fCheckOverlaps);                                                                                   // checking overlaps
+
+
+
     //
     // Gap
     //
-    /*
+    
     auto gapS = new G4Box("Gap",                                               // its name
                           calorSizeXY / 2, calorSizeXY / 2, gapThickness / 2); // its size
 
@@ -390,14 +419,14 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
 
     fGapPV = new G4PVPlacement(
         0,                                                                 // no rotation
-        G4ThreeVector(0., 0., -detectorThickness / 2 + absoThickness / 2), // its position
+        G4ThreeVector(0., 0., -gapThickness / 2), // its position
         gapLV,                                                             // its logical volume
         "Gap",                                                             // its name
         worldLV,                                                           // its mother  volume
         false,                                                             // no boolean operation
         0,                                                                 // copy number
         fCheckOverlaps);                                                   // checking overlaps
-
+/*
     //
     // Detector
     //

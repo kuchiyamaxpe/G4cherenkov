@@ -89,7 +89,7 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
   G4double kinEnergy = track->GetKineticEnergy();
   G4String ParticleName = track->GetDynamicParticle()->GetParticleDefinition()->GetParticleName();
 
-  /*
+  
   G4String ProcessName = "None";
   if (track->GetCreatorProcess())
   {
@@ -100,14 +100,14 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
   }
   G4cout << "ProcessName: " << ProcessName << " VolumeNames: " << preVolName << preVolume << " -> " << postVolName << " "
          << "ParticleName: " << ParticleName << " Position: " << position_World.x() << " -> " << postposition.x() << " " << position_World.y() << " -> " << postposition.y() << " " << position_World.z() << " -> " << postposition.z() << G4endl;
-*/
+
 
   auto filepath = runaction_u->GetDirName() + "/" + runaction_u->GetFileName();
   std::ofstream writing_file;
   writing_file.open(filepath, std::ios::app);
   // if step is within the scoring volume
   fScoringVol = fDetConstruction->GetScoringVol();
-  if (preVolume == fScoringVol && ParticleName == "opticalphoton")
+  if (preVolume == fScoringVol&&postVolName=="Gap" && ParticleName == "opticalphoton")
   {
     // G4cout << "WRITING TO FILE... " << postposition.x() << " " << postposition.y() << " " << postposition.z() << " " << 1240 / kinEnergy * eV << G4endl;
 
