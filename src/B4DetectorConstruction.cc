@@ -167,7 +167,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
     G4double SigapThickness = 500. * um;
     G4double calorSizeXY = 50. * mm;
     G4double detectorThickness = 1 * um;
-    G4double emptylayerThickness=1.5*m;
+    G4double emptylayerThickness=1.0*m;
     G4double degraderThickness=7*cm;
 
 
@@ -414,7 +414,7 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         douserMaterial, // its material
         "degraderLV");    // its name
 
-    
+   /* 
     fDegraderPV=new G4PVPlacement(
         0,                                                                                                 // no rotation
         G4ThreeVector(0., 0., worldSizeZ/2-degraderThickness), // its position
@@ -424,6 +424,8 @@ G4VPhysicalVolume *B4DetectorConstruction::DefineVolumes()
         false,                                                                                             // no boolean operation
         0,                                                                                                 // copy number
         fCheckOverlaps);                                                                                   // checking overlaps
+*/
+
 
     //
     // Gap

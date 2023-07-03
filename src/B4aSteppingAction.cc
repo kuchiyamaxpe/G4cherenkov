@@ -96,10 +96,10 @@ void B4aSteppingAction::UserSteppingAction(const G4Step *step)
     G4int trackid = track->GetTrackID();
     //ProcessName = track->GetCreatorProcess()->GetProcessName();
     ProcessName = track->GetCreatorProcess()->GetMasterProcess()->GetProcessName();
-    G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << G4endl;
+   // G4cout << "TrackID: " << trackid << " Master Process: " << track->GetCreatorProcess()->GetMasterProcess() << G4endl;
   }
-  G4cout << "ProcessName: " << ProcessName << " VolumeNames: " << preVolName << preVolume << " -> " << postVolName << " "
-         << "ParticleName: " << ParticleName << " Position: " << position_World.x() << " -> " << postposition.x() << " " << position_World.y() << " -> " << postposition.y() << " " << position_World.z() << " -> " << postposition.z() << G4endl;
+  // G4cout << "ProcessName: " << ProcessName << " VolumeNames: " << preVolName << preVolume << " -> " << postVolName << " "
+  //       << "ParticleName: " << ParticleName << " Position: " << position_World.x() << " -> " << postposition.x() << " " << position_World.y() << " -> " << postposition.y() << " " << position_World.z() << " -> " << postposition.z() << G4endl;
 
 
   auto filepath = runaction_u->GetDirName() + "/" + runaction_u->GetFileName();
